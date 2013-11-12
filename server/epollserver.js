@@ -4,11 +4,6 @@ Meteor.startup(function () {
     // code to run on server at startup
 });
 
-
-Meteor.publish('questions',function(userId){
-  return Questions.find({'submittedBy' : {$ne : userId}},{sort:{'submittedOn':-1}})
-});
-
 Meteor.methods({
   addQuestion : function(questionText){
     console.log('Adding Question');
