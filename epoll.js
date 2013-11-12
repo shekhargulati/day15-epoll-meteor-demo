@@ -6,11 +6,9 @@ if (Meteor.isClient) {
     'click input.add-question' : function(event){
         event.preventDefault();
         var questionText = document.getElementById("questionText").value;
-        Questions.insert({
-          'questionText' : questionText,
-          'submittedOn': new Date(),
-          'submittedBy' : Meteor.userId()
-        });
+        Meteor.call("addQuestion",questionText,function(error , questionId){
+          console.log('added question with Id .. '+questionId);
+        })
         document.getElementById("questionText").value = "";
 
     }
@@ -48,5 +46,16 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+  });
+  Meteor.methods({
+    addQuestion : function(questionText){
+      console.log('Adding Question');
+      var questionId = Questions.insert({
+          'questionText' : questionText,
+          'submittedOn': new Date(),
+          'submittedBy' : Meteor.userId()
+        });
+      return questionId;
+    }
   });
 }
