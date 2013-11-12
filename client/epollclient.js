@@ -1,8 +1,6 @@
 Questions = new Meteor.Collection("questions");
-
-if (Meteor.isClient) {
   
-  Template.addquestion.events({
+Template.addquestion.events({
     'click input.add-question' : function(event){
         event.preventDefault();
         var questionText = document.getElementById("questionText").value;
@@ -12,11 +10,11 @@ if (Meteor.isClient) {
         document.getElementById("questionText").value = "";
 
     }
-  });
+});
 
-  Template.question.events({
-    'click': function () {
-      Session.set("selected_question", this._id);
+Template.question.events({
+	'click': function () {
+    	Session.set("selected_question", this._id);
     },
 
     'click a.yes' : function (event) {
@@ -42,29 +40,3 @@ if (Meteor.isClient) {
   Template.questions.items = function(){
     return Questions.find({},{sort:{'submittedOn':-1}});
   };
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
-  Meteor.methods({
-    addQuestion : function(questionText){
-      console.log('Adding Question');
-      var questionId = Questions.insert({
-          'questionText' : questionText,
-          'submittedOn': new Date(),
-          'submittedBy' : Meteor.userId()
-        });
-      return questionId;
-    },
-    incrementYesVotes : function(questionId){
-        console.log(questionId);
-        Questions.update(questionId,{$inc : {'yes':1}});
-    },
-    incrementNoVotes : function(questionId){
-        console.log(questionId);
-        Questions.update(questionId,{$inc : {'no':1}});
-    }
-  });
-}
