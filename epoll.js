@@ -8,7 +8,7 @@ if (Meteor.isClient) {
         var questionText = document.getElementById("questionText").value;
         Meteor.call("addQuestion",questionText,function(error , questionId){
           console.log('added question with Id .. '+questionId);
-        })
+        });
         document.getElementById("questionText").value = "";
 
     }
@@ -23,8 +23,9 @@ if (Meteor.isClient) {
       event.preventDefault();
       if(Meteor.userId()){
         var questionId = Session.get('selected_question');
+        console.log('updating yes count for questionId '+questionId);
+        Meteor.call("incrementYesVotes",questionId);
         
-        Questions.update(questionId,{$inc : {'yes':1}});  
       }
       
     },
@@ -32,8 +33,8 @@ if (Meteor.isClient) {
       event.preventDefault();
       if(Meteor.userId()){
         var questionId = Session.get('selected_question');
-        console.log(questionId);
-        Questions.update(questionId,{$inc : {'no':1}});
+        console.log('updating no count for questionId '+questionId);
+        Meteor.call("incrementNoVotes",questionId);
       }
     }
   });
@@ -56,6 +57,14 @@ if (Meteor.isServer) {
           'submittedBy' : Meteor.userId()
         });
       return questionId;
+    },
+    incrementYesVotes : function(questionId){
+        console.log(questionId);
+        Questions.update(questionId,{$inc : {'yes':1}});
+    },
+    incrementNoVotes : function(questionId){
+        console.log(questionId);
+        Questions.update(questionId,{$inc : {'no':1}});
     }
   });
 }
