@@ -1,1 +1,6 @@
 /* CSS declarations go here */
+.login-display-name{color: white }
+.login-button{background-color: white}
+ #main {
+	padding-top:20px;
+}

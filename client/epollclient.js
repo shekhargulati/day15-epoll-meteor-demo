@@ -37,6 +37,11 @@ Template.question.events({
     }
   });
 
-  Template.questions.items = function(){
+Template.questions.items = function(){
+
+	Meteor.autorun(function() {
+        Meteor.subscribe("questions", Meteor.userId());
+    });
+    
     return Questions.find({},{sort:{'submittedOn':-1}});
-  };
+ };
